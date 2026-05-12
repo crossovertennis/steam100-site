@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>STEAM100</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Jost',Arial,sans-serif;background:#0d1b2a;color:#1c1c1e;}
+#lock{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;background:#0d1b2a;}
+.logo{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:700;color:#fff;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.4rem;text-align:center;}
+.logo span{color:#c9a84c;}
+.tagline{font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:#5a7090;margin-bottom:2.5rem;text-align:center;}
+.panel{background:#12263a;border:2px solid #c9a84c;padding:2rem;width:100%;max-width:360px;text-align:center;}
+.panel h2{font-family:'Cormorant Garamond',serif;font-size:1rem;color:#c9a84c;font-weight:400;margin-bottom:1.25rem;}
+.pin{width:100%;background:#0d1b2a;border:2px solid #c9a84c;color:#fff;font-size:1.5rem;padding:12px;text-align:center;outline:none;font-family:'Jost',Arial;margin-bottom:.5rem;}
+.pin:focus{border-color:#e8c97a;}
+.err{color:#ff6b6b;font-size:.8rem;min-height:1.2rem;margin-bottom:.5rem;}
+.enter{width:100%;background:#c9a84c;color:#0d1b2a;border:none;padding:14px;font-family:'Jost',Arial;font-size:.75rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;}
+.enter:active{background:#e8c97a;}
+#app{display:none;min-height:100vh;flex-direction:column;background:#f8f5ef;}
+.hdr{background:#0d1b2a;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;border-bottom:2px solid #c9a84c;position:sticky;top:0;z-index:100;}
+.hdr-logo{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:#fff;letter-spacing:.15em;text-transform:uppercase;}
+.hdr-logo span{color:#c9a84c;}
+.hdr-right{display:flex;align-items:center;gap:.75rem;}
+.role-tag{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.15);padding:3px 9px;}
+.signout{background:transparent;border:1px solid rgba(201,168,76,.4);color:#c9a84c;padding:5px 12px;cursor:pointer;font-family:'Jost',Arial;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;}
+.nav{background:#12263a;display:flex;padding:0 1.5rem;border-bottom:1px solid rgba(201,168,76,.15);overflow-x:auto;position:sticky;top:56px;z-index:90;}
+.nav::-webkit-scrollbar{height:0;}
+.ntab{background:none;border:none;border-bottom:2px solid transparent;color:rgba(255,255,255,.4);cursor:pointer;font-family:'Jost',Arial;font-size:.6rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:13px 15px 11px;white-space:nowrap;}
+.ntab:hover{color:rgba(255,255,255,.75);}
+.ntab.on{color:#c9a84c;border-bottom-color:#c9a84c;}
+.page{flex:1;padding:2rem 2rem 5rem;max-width:1100px;width:100%;margin:0 auto;}
+.ph{display:flex;align-items:flex-start;justify-content:space-between;padding-bottom:1.1rem;border-bottom:1px solid #ddd8cc;margin-bottom:1.75rem;flex-wrap:wrap;gap:1rem;}
+.ptitle{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:400;color:#0d1b2a;}
+.psub{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:#7a7a8a;margin-top:.2rem;}
+.eye{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#c9a84c;font-weight:600;margin-bottom:.3rem;}
+.acts{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;cursor:pointer;border:none;font-family:'Jost',Arial;font-size:.6rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;padding:7px 14px;}
+.bnn{background:#0d1b2a;color:#fff;}.bnn:hover{background:#1a3450;}
+.bng{background:#c9a84c;color:#0d1b2a;}.bng:hover{background:#e8c97a;}
+.bno{background:transparent;color:#0d1b2a;border:1px solid #ddd8cc;}.bno:hover{border-color:#0d1b2a;}
+.bsm{padding:4px 9px;font-size:.57rem;}
+.bdg{display:inline-block;font-size:.54rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;}
+.bg{background:#e6f2ec;color:#2e6b4a;}.br{background:#f5e6e6;color:#8b2020;}
+.ba{background:#fdf3e3;color:#9a6b10;}.bb{background:#e3ecf7;color:#1d3f6e;}.bx{background:#f0ebe0;color:#7a7a8a;}
+.card{background:#fff;border:1px solid #ddd8cc;padding:1.25rem;margin-bottom:.85rem;}
+.ctitle{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:500;color:#0d1b2a;}
+.tw{background:#fff;border:1px solid #ddd8cc;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.8rem;}
+thead tr{border-bottom:2px solid #0d1b2a;}
+th{text-align:left;font-size:.55rem;letter-spacing:.17em;text-transform:uppercase;font-weight:600;color:#0d1b2a;padding:9px 12px;background:#f0ebe0;}
+td{padding:11px 12px;border-bottom:1px solid #f0ebe0;font-weight:300;vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:#faf8f3;}
+.ibar{background:#fff;border:1px solid #ddd8cc;border-left:4px solid #c9a84c;padding:.85rem 1rem;margin-bottom:.85rem;display:flex;gap:.6rem;}
+.ibar.g{border-left-color:#2e6b4a;}.ibar.r{border-left-color:#8b2020;}.ibar.b{border-left-color:#1d3f6e;}.ibar.a{border-left-color:#9a6b10;}
+.ititle{font-size:.8rem;font-weight:600;margin-bottom:2px;}
+.ibody{font-size:.74rem;color:#7a7a8a;font-weight:300;line-height:1.55;}
+.ibody a{color:#c9a84c;font-weight:700;text-decoration:none;}
+.sdiv{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:#7a7a8a;font-weight:600;padding-bottom:.45rem;border-bottom:1px solid #ddd8cc;margin:1.5rem 0 .85rem;}
+.dr{display:flex;align-items:center;gap:.85rem;padding:.8rem 1rem;border-bottom:1px solid #f0ebe0;}
+.dr:last-child{border-bottom:none;}.dr:hover{background:#faf8f3;}
+.dn{font-size:.84rem;font-weight:500;}
+.dm{font-size:.66rem;color:#7a7a8a;margin-top:2px;}
+.dl{color:#c9a84c;font-size:.66rem;font-weight:700;text-decoration:none;letter-spacing:.08em;text-transform:uppercase;flex-shrink:0;}
+.mtg{background:#fff;border:1px solid #ddd8cc;display:flex;overflow:hidden;margin-bottom:.85rem;}
+.mdate{background:#0d1b2a;padding:1rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:68px;text-align:center;}
+.mmo{font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:#c9a84c;font-weight:700;}
+.mdy{font-family:'Cormorant Garamond',serif;font-size:2rem;color:#fff;line-height:1;}
+.mbody{flex:1;padding:1rem 1.25rem;}
+.mname{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:500;}
+.mmeta{font-size:.7rem;color:#7a7a8a;margin-top:2px;}
+.comp{background:#fff;border:1px solid #ddd8cc;border-left:4px solid #c9a84c;padding:1rem 1.25rem;margin-bottom:.6rem;display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap;}
+.comp.r{border-left-color:#8b2020;}.comp.a{border-left-color:#9a6b10;}.comp.g{border-left-color:#2e6b4a;opacity:.78;}
+.overlay{position:fixed;inset:0;background:rgba(13,27,42,.7);z-index:500;display:flex;align-items:center;justify-content:center;padding:1.5rem;}
+.modal{background:#fff;width:100%;max-width:560px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.mhdr{background:#0d1b2a;padding:1.1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;}
+.mhdr-t{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:500;color:#fff;}
+.mhdr-x{background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:1rem;padding:0 4px;}
+.mbod{padding:1.5rem;}
+.mfot{padding:.9rem 1.5rem;border-top:1px solid #f0ebe0;display:flex;gap:.5rem;justify-content:flex-end;background:#faf8f4;}
+.fld{margin-bottom:.85rem;}
+.fld label{display:block;font-size:.56rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:#7a7a8a;margin-bottom:4px;}
+.inp,.sel,.txa{width:100%;border:1px solid #ddd8cc;padding:8px 10px;font-family:'Jost',Arial;font-size:.8rem;font-weight:300;color:#1c1c1e;background:#f8f5ef;outline:none;border-radius:0;-webkit-appearance:none;}
+.inp:focus,.sel:focus,.txa:focus{border-color:#0d1b2a;background:#fff;}
+.txa{resize:vertical;min-height:70px;}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;}
+.chk{width:14px;height:14px;flex-shrink:0;border:1px solid #ddd8cc;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:2px;}
+.chk.on{background:#0d1b2a;border-color:#0d1b2a;}
+.todo-row{display:flex;align-items:flex-start;gap:.65rem;padding:.75rem 1rem;border-bottom:1px solid #f0ebe0;}
+.todo-row:last-child{border-bottom:none;}
+.todo-t{font-size:.82rem;font-weight:500;}
+.todo-t.done{text-decoration:line-through;color:#7a7a8a;}
+.todo-m{font-size:.65rem;color:#7a7a8a;margin-top:2px;}
+.todo-n{font-size:.72rem;margin-top:.3rem;background:#f0ebe0;padding:.35rem .6rem;border-left:2px solid #ddd8cc;font-weight:300;}
+.todo-ts{font-size:.6rem;color:#2e6b4a;margin-top:2px;font-weight:600;}
+.cg{display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));}
+.empty{text-align:center;padding:2.5rem;color:#7a7a8a;font-size:.8rem;}
+.score{background:#0d1b2a;padding:1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap;cursor:pointer;}
+.score-n{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:300;line-height:1;}
+@media(max-width:680px){.page{padding:1.25rem 1rem 4rem;}.hdr,.nav{padding-left:1rem;padding-right:1rem;}.f2{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div id="lock">
+  <div class="logo">STEAM<span>100</span></div>
+  <div class="tagline">Private Governance Platform</div>
+  <div class="panel">
+    <h2>Enter your access code</h2>
+    <input class="pin" type="password" id="pin" maxlength="4" autocomplete="off" placeholder="----"/>
+    <div class="err" id="perr">&nbsp;</div>
+    <button class="enter" id="ebtn">Enter Platform</button>
+  </div>
+</div>
+<div id="app">
+  <header class="hdr">
+    <div class="hdr-logo">STEAM<span>100</span></div>
+    <div class="hdr-right">
+      <span class="role-tag" id="rtag"></span>
+      <button class="signout" id="sbtn">Sign Out</button>
+    </div>
+  </header>
+  <nav class="nav" id="nav"></nav>
+  <div class="page" id="pg"></div>
+</div>
+<script>
+var U={"7949":{role:"admin",name:"Lance",label:"Administrator"},"8791":{role:"board",name:"Board",label:"Board Member"},"4321":{role:"staff",name:"Staff",label:"Staff & Volunteer"}};
+var CU=null;
+function el(id){return document.getElementById(id);}
+function isA(){return CU&&CU.role==="admin";}
+function isB(){return CU&&(CU.role==="admin"||CU.role==="board");}
+function fmtD(d){try{return new Date(d).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});}catch(e){return d||"";}}
+function fmtMo(d){return new Date(d).toLocaleDateString("en-US",{month:"short"}).toUpperCase();}
+function fmtDy(d){return new Date(d).getDate();}
+function fmtN(){return new Date().toLocaleString("en-US",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"});}
+function dU(d){return Math.round((new Date(d)-new Date())/86400000);}
+function fmtM(n){return "$"+Number(n||0).toLocaleString();}
+function uC(d){return d<0?"#8b2020":d<=21?"#9a6b10":"#2e6b4a";}
+function uL(d){return d<0?Math.abs(d)+"d overdue":d===0?"Due Today":d+"d left";}
+function sb(s){var m={pending:"ba","in-progress":"bb",overdue:"br",complete:"bg",submitted:"bg",research:"bx",draft:"ba",planning:"ba",scheduled:"bb",active:"bg",vacant:"bx",high:"br",medium:"ba",low:"bx",resolved:"bg",open:"ba",passed:"bg",proposed:"ba",filed:"bg"};return"bdg "+(m[s]||"bx");}
+function loadD(){try{var s=localStorage.getItem("s100v10");if(s)return JSON.parse(s);}catch(e){}return defD();}
+function saveD(d){try{localStorage.setItem("s100v10",JSON.stringify(d));}catch(e){}}
+function defD(){return{
+compliance:[
+{id:1,task:"Form 990-N (e-Postcard)",due:"2026-05-15",cat:"IRS Filing",notes:"Annual filing for orgs under $50k gross receipts.",link:"https://www.irs.gov/charities-non-profits/annual-electronic-filing-requirement-for-small-exempt-organizations-form-990-n-e-postcard",done:false,doneAt:null},
+{id:2,task:"CA Form RRF-1 — Registry Renewal",due:"2026-05-15",cat:"CA Attorney General",notes:"Annual renewal fee report.",link:"https://oag.ca.gov/charities/forms",done:false,doneAt:null},
+{id:3,task:"CA Statement of Information (SI-100)",due:"2026-07-01",cat:"CA Secretary of State",notes:"Biennial filing. $20 fee.",link:"https://bizfileonline.sos.ca.gov/",done:false,doneAt:null},
+{id:4,task:"Federal 501(c)(3) — Form 1023-EZ",due:"2026-06-01",cat:"IRS Filing",notes:"$275 fee. Required before soliciting donations.",link:"https://www.pay.gov/public/form/start/99187728",done:false,doneAt:null},
+{id:5,task:"Board Meeting Minutes — Q1 2026",due:"2026-04-01",cat:"Governance",notes:"Required record of all Q1 board actions.",link:"",done:false,doneAt:null},
+{id:6,task:"Conflict of Interest — Annual Signatures",due:"2026-06-30",cat:"Governance",notes:"All board members must sign annually.",link:"",done:false,doneAt:null},
+{id:7,task:"CA Charitable Solicitation Registration",due:"2026-06-01",cat:"CA Attorney General",notes:"Required before fundraising in California.",link:"https://oag.ca.gov/charities/forms",done:false,doneAt:null},
+{id:8,task:"Google for Nonprofits Application",due:"2026-05-20",cat:"Infrastructure",notes:"Free Workspace, Drive, Docs, Calendar.",link:"https://www.google.com/nonprofits/",done:false,doneAt:null},
+{id:9,task:"DUNS/UEI Registration (SAM.gov)",due:"2026-05-15",cat:"Federal",notes:"Required for federal grant eligibility.",link:"https://sam.gov/",done:false,doneAt:null},
+{id:10,task:"CA FTB — Form 3500A (Tax Exemption)",due:"2026-07-15",cat:"CA Taxes",notes:"File after IRS determination letter received.",link:"https://www.ftb.ca.gov/",done:false,doneAt:null},
+{id:11,task:"Whistleblower Policy — Board Adoption",due:"2026-06-30",cat:"Governance",notes:"Required IRS best practice.",link:"https://www.councilofnonprofits.org/running-nonprofit/governance-leadership/whistleblower-policies",done:false,doneAt:null},
+{id:12,task:"Document Retention Policy — Board Adoption",due:"2026-06-30",cat:"Governance",notes:"Required for 990 compliance.",link:"https://www.councilofnonprofits.org/running-nonprofit/operations/document-retention-policies",done:false,doneAt:null}
+],
+todos:[
+{id:1,task:"Check CA incorporation at BizFile Online",done:false,doneAt:null,due:"2026-05-15",who:"Lance",pri:"high",note:"",ref:"https://bizfileonline.sos.ca.gov/search/business",cat:"Compliance"},
+{id:2,task:"File Form 990-N e-Postcard (IRS)",done:false,doneAt:null,due:"2026-05-15",who:"Lance",pri:"high",note:"Free filing at IRS.gov.",ref:"https://www.irs.gov/charities-non-profits/annual-electronic-filing-requirement-for-small-exempt-organizations-form-990-n-e-postcard",cat:"Tax Filing"},
+{id:3,task:"File CA Form RRF-1",done:false,doneAt:null,due:"2026-05-15",who:"Lance",pri:"high",note:"Annual renewal with CA AG office.",ref:"https://oag.ca.gov/charities/forms",cat:"State Filing"},
+{id:4,task:"Apply for Google for Nonprofits",done:false,doneAt:null,due:"2026-05-20",who:"Lance",pri:"high",note:"Free Workspace — Drive, Docs, Meet.",ref:"https://www.google.com/nonprofits/",cat:"Infrastructure"},
+{id:5,task:"Complete Form 1023-EZ at pay.gov",done:false,doneAt:null,due:"2026-05-20",who:"Lance",pri:"high",note:"$275 filing fee.",ref:"https://www.pay.gov/public/form/start/99187728",cat:"Tax Filing"},
+{id:6,task:"File CA Charitable Solicitation Registration",done:false,doneAt:null,due:"2026-06-01",who:"Lance",pri:"high",note:"Required before any fundraising in CA.",ref:"https://oag.ca.gov/charities/forms",cat:"State Filing"}
+],
+grants:[
+{id:1,name:"California Arts Council — Arts Education Grant",amt:15000,dl:"2026-06-15",status:"research",cat:"Arts & Education",done:false,notes:"Strong mission alignment."},
+{id:2,name:"STEM Next Opportunity Fund",amt:25000,dl:"2026-07-01",status:"draft",cat:"STEM Education",done:false,notes:"LOI required first."},
+{id:3,name:"Oakland Fund for Children & Youth",amt:50000,dl:"2026-08-15",status:"research",cat:"Youth Programs",done:false,notes:"Oakland-specific. Strong fit."},
+{id:4,name:"Tipping Point Community",amt:100000,dl:"2026-09-01",status:"research",cat:"Bay Area",done:false,notes:"High fit."}
+],
+board:[
+{id:1,name:"Mia",role:"President",status:"active",email:"",term:"2027-01-01",resp:["Strategic leadership","External relations","Board chair"]},
+{id:2,name:"Lance",role:"Secretary / Treasurer / VP (Acting)",status:"active",email:"",term:"2027-01-01",resp:["Financial oversight","Meeting records","Compliance filings"]},
+{id:3,name:"Edward",role:"Board Member",status:"active",email:"",term:"2027-01-01",resp:["Program development","Community outreach"]},
+{id:4,name:"Nina",role:"Board Member",status:"active",email:"",term:"2028-01-01",resp:["Committee participation","Community representation"]},
+{id:5,name:"Maisha",role:"Board Member",status:"active",email:"",term:"2028-01-01",resp:["Committee participation","Donor relations"]},
+{id:6,name:"",role:"Vice President",status:"vacant",email:"",term:"",resp:["Support President","Lead committees"]}
+],
+meetings:[
+{id:1,title:"Governance Working Session — Part 2",date:"2026-05-10",time:"6:00 PM",loc:"TBD",zoom:"",agenda:"Move from individual positions to collective governance decision.",mins:"",status:"scheduled"},
+{id:2,title:"Q2 Full Board Meeting",date:"2026-05-30",time:"5:00 PM",loc:"TBD",zoom:"",agenda:"Quorum. Vote on governance documents. Review compliance.",mins:"",status:"scheduled"},
+{id:3,title:"Board Recruitment Info Session",date:"2026-06-10",time:"6:00 PM",loc:"Oakland, CA",zoom:"",agenda:"Present board member criteria.",mins:"",status:"planning"}
+],
+votes:[{id:1,date:"2026-04-01",title:"Suspend non-essential operations pending governance review",result:"proposed",yea:1,nay:0,abs:0,notes:"Proposed by Lance. Awaiting formal board vote."}],
+docs:[
+{id:1,name:"Articles of Incorporation",cat:"Governance",date:"2025-01-01",link:"",notes:"Filed with CA Secretary of State.",arch:false},
+{id:2,name:"Bylaws — Draft",cat:"Governance",date:"2026-04-01",link:"",notes:"Pending board ratification.",arch:false},
+{id:3,name:"Conflict of Interest Policy",cat:"Governance",date:"2026-04-01",link:"",notes:"Requires annual board signatures.",arch:false},
+{id:4,name:"EIN Confirmation Letter",cat:"Tax & Legal",date:"2025-01-01",link:"",notes:"Federal Employer Identification Number.",arch:false},
+{id:5,name:"Board Meeting Minutes Template",cat:"Records",date:"2026-04-01",link:"",notes:"Use for all official meetings.",arch:false}
+],
+financials:[
+{id:1,name:"Bank Statement Jan 2026",month:"2026-01",type:"Bank Statement",amt:"",link:"",filed:false},
+{id:2,name:"Bank Statement Feb 2026",month:"2026-02",type:"Bank Statement",amt:"",link:"",filed:false},
+{id:3,name:"Bank Statement Mar 2026",month:"2026-03",type:"Bank Statement",amt:"",link:"",filed:false},
+{id:4,name:"Bank Statement Apr 2026",month:"2026-04",type:"Bank Statement",amt:"",link:"",filed:false}
+],
+events:[{id:1,name:"STEAM100 Public Launch Gala",date:"2026-09-20",loc:"Oakland, CA",status:"planning",vision:"Inaugural public event celebrating our founding and mission.",goals:"1. Introduce STEAM100 to 200+ community members.\n2. Cultivate 10+ potential major donors.\n3. Raise $5,000-$10,000 event-night.",budget:5000,tasks:[
+{id:1,name:"Secure event venue",cat:"Location & Venue",due:"2026-06-15",who:"Lance",done:false,doneAt:null,pri:"high",note:"Oakland Museum or community center"},
+{id:2,name:"Identify keynote speaker",cat:"Speakers & Presenters",due:"2026-06-15",who:"Lance",done:false,doneAt:null,pri:"high",note:"Bay Area STEM leader"},
+{id:3,name:"Design event flyer",cat:"Outreach & Marketing",due:"2026-07-15",who:"",done:false,doneAt:null,pri:"high",note:""},
+{id:4,name:"Send invitations to 200+ contacts",cat:"Outreach & Marketing",due:"2026-08-15",who:"Edward",done:false,doneAt:null,pri:"high",note:""},
+{id:5,name:"Identify and approach sponsors",cat:"Fundraising",due:"2026-07-01",who:"Lance",done:false,doneAt:null,pri:"high",note:"Tiers: $500/$1,000/$2,500"}
+]}],
+folders:{Mia:[],Edward:[],Nina:[],Maisha:[],Lance:[]},
+issues:[
+{id:1,title:"Governance Crisis — Board Quorum and Decision Authority",pri:"critical",status:"open",owner:"Lance",notes:"Three-person board, limited availability. Part 1 complete. Part 2 scheduled.",res:""},
+{id:2,title:"Secretary/Treasurer/VP roles all held by one person",pri:"high",status:"open",owner:"Lance",notes:"Lance fulfills three officer roles simultaneously.",res:""}
+],
+bylaws:"<p><strong>ARTICLE I — NAME AND PURPOSE</strong></p><p>The name of this organization shall be STEAM100. Mission: advance STEAM education for underserved youth in Oakland.</p><p><strong>ARTICLE II — BOARD OF DIRECTORS</strong></p><p>No fewer than three and no more than fifteen members. Directors serve two-year terms. A majority constitutes quorum.</p><p><strong>ARTICLE III — OFFICERS</strong></p><p>Officers: President, Vice President, Secretary, and Treasurer, elected annually.</p><p><strong>ARTICLE IV — MEETINGS</strong></p><p>At least four regular meetings per year. Special meetings require 72 hours notice.</p><p><strong>ARTICLE V — FINANCES</strong></p><p>Fiscal year: January 1 through December 31. No expenditure exceeding $500 without board approval.</p>"
+};}
+var D=loadD();
+el("pin").addEventListener("keydown",function(e){if(e.key==="Enter")login();});
+el("ebtn").addEventListener("click",login);
+el("sbtn").addEventListener("click",logout);
+function login(){
+  var p=(el("pin").value||"").replace(/\s/g,"");
+  var u=U[p];
+  if(u){CU=u;el("perr").innerHTML="&nbsp;";el("lock").style.display="none";el("app").style.display="flex";el("rtag").textContent=u.label;buildNav();show("dash");}
+  else{el("perr").textContent="Incorrect code. Please try again.";el("pin").value="";}
+}
+function logout(){CU=null;el("lock").style.display="flex";el("app").style.display="none";el("pin").value="";el("perr").innerHTML="&nbsp;";}
+var TABS=[
+{id:"dash",l:"Overview",r:["admin","board","staff"]},
+{id:"comp",l:"Compliance",r:["admin","board","staff"]},
+{id:"mtgs",l:"Meetings",r:["admin","board","staff"]},
+{id:"evts",l:"Events",r:["admin","board","staff"]},
+{id:"todos",l:"To-Do List",r:["admin","board","staff"]},
+{id:"guide",l:"Board Guide",r:["admin","board"]},
+{id:"grants",l:"Grants",r:["admin","board"]},
+{id:"bdir",l:"Board & Staff",r:["admin","board"]},
+{id:"votes",l:"Votes",r:["admin","board"]},
+{id:"docs",l:"Documents",r:["admin","board","staff"]},
+{id:"fold",l:"Member Folders",r:["admin","board"]},
+{id:"fin",l:"Financials",r:["admin"]},
+{id:"iss",l:"Issues",r:["admin"]},
+{id:"byl",l:"Bylaws",r:["admin"]}
+];
+function buildNav(){
+  var n=el("nav");n.innerHTML="";
+  TABS.filter(function(t){return t.r.indexOf(CU.role)>=0;}).forEach(function(t){
+    var b=document.createElement("button");b.className="ntab";b.textContent=t.l;b.dataset.id=t.id;
+    b.addEventListener("click",function(){show(t.id);});n.appendChild(b);
+  });
+}
+function show(id){
+  document.querySelectorAll(".ntab").forEach(function(b){b.classList.toggle("on",b.dataset.id===id);});
+  var p=el("pg");p.innerHTML="";
+  var M={dash:pgDash,comp:pgComp,mtgs:pgMtgs,evts:pgEvts,todos:pgTodos,guide:pgGuide,grants:pgGrants,bdir:pgBdir,votes:pgVotes,docs:pgDocs,fold:pgFold,fin:pgFin,iss:pgIss,byl:pgByl};
+  if(M[id])M[id](p);
+}
+function modal(title,body,foot){
+  var ov=document.createElement("div");ov.className="overlay";
+  ov.innerHTML='<div class="modal"><div class="mhdr"><div class="mhdr-t">'+title+'</div><button class="mhdr-x" onclick="this.closest(\'.overlay\').remove()">x</button></div><div class="mbod">'+body+'</div><div class="mfot">'+foot+'</div></div>';
+  ov.addEventListener("click",function(e){if(e.target===ov)ov.remove();});
+  document.body.appendChild(ov);
+}
+function closeM(){var o=document.querySelector(".overlay");if(o)o.remove();}
+
+// DASHBOARD
+function pgDash(p){
+var od=D.compliance.filter(function(c){return dU(c.due)<0&&!c.done;});
+var sn=D.compliance.filter(function(c){var d=dU(c.due);return d>=0&&d<=21&&!c.done;});
+var fi=D.compliance.filter(function(c){return c.done;}).length;
+var to=D.compliance.length;
+var pct=Math.round(fi/to*100);
+var pc=pct>=80?”#6fd4a0”:pct>=50?”#e8c97a”:”#f87171”;
+var nm=D.meetings.filter(function(m){return dU(m.date)>=0;}).sort(function(a,b){return dU(a.date)-dU(b.date);})[0];
+var h=’<div class="ph"><div><div class="eye">STEAM100</div><div class="ptitle">Welcome, ‘+CU.name+’</div><div class="psub">’+new Date().toLocaleDateString(“en-US”,{weekday:“long”,month:“long”,day:“numeric”,year:“numeric”})+’</div></div></div>’;
+h+=’<div class="score" onclick="show(\'comp\')">’;
+h+=’<div><div class="score-n" style="color:'+pc+'">’+pct+’%</div><div style="font-size:.58rem;letter-spacing:.17em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:3px">Compliance Score</div></div>’;
+h+=’<div style="flex:1"><div style="font-size:.65rem;color:rgba(255,255,255,.45);margin-bottom:6px">’+fi+’ of ‘+to+’ filings complete — tap for detail</div>’;
+h+=’<div style="height:8px;background:rgba(255,255,255,.12)"><div style="height:100%;background:'+pc+';width:'+pct+'%"></div></div>’;
+h+=’<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1rem">’;
+[{n:od.length,l:“Overdue”,c:”#f87171”},{n:sn.length,l:“Due Soon”,c:”#e8c97a”},{n:fi,l:“Filed”,c:”#6fd4a0”}].forEach(function(s){h+=’<div style="text-align:center"><div style="font-family:Cormorant Garamond,serif;font-size:1.8rem;color:'+s.c+';font-weight:300;line-height:1">’+s.n+’</div><div style="font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:3px">’+s.l+’</div></div>’;});
+h+=’</div></div><div style="font-size:.65rem;color:#c9a84c;letter-spacing:.1em;text-transform:uppercase;font-weight:600">View All →</div></div>’;
+if(od.length)h+=’<div class="ibar r"><span>⚠️</span><div><div class="ititle">’+od.length+’ Overdue Filing’+(od.length>1?“s”:””)+’</div><div class="ibody">’+od.map(function(c){return c.task;}).join(” · “)+’</div></div></div>’;
+h+=’<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">’;
+h+=’<div><div class="sdiv">High Priority Tasks</div><div style="background:#fff;border:1px solid #ddd8cc">’;
+var hi=D.todos.filter(function(t){return !t.done&&t.pri===“high”;}).slice(0,5);
+if(!hi.length)h+=’<div class="empty">No high-priority tasks open.</div>’;
+else hi.forEach(function(t){h+=’<div class="dr"><div style="width:8px;height:8px;border-radius:50%;background:#8b2020;flex-shrink:0"></div><div style="flex:1"><div class="dn">’+t.task+’</div><div class="dm">Due ‘+fmtD(t.due)+(t.who?” · “+t.who:””)+’</div></div>’+(t.ref?’<a href="'+t.ref+'" target="_blank" class="dl">Go →</a>’:””)+’</div>’;});
+h+=’</div><button class="btn bno bsm" style="margin-top:.5rem" onclick="show(\'todos\')">View All →</button></div>’;
+h+=’<div><div class="sdiv">Next Meeting</div>’;
+if(nm)h+=’<div class="mtg"><div class="mdate"><div class="mmo">’+fmtMo(nm.date)+’</div><div class="mdy">’+fmtDy(nm.date)+’</div></div><div class="mbody"><div class="mname">’+nm.title+’</div><div class="mmeta">’+nm.time+(nm.loc?” · “+nm.loc:””)+’</div>’+(nm.zoom?’<a href="'+nm.zoom+'" target="_blank" style="font-size:.68rem;color:#c9a84c;font-weight:700;text-decoration:none;display:block;margin-top:3px">Join Meeting →</a>’:””)+’</div></div>’;
+else h+=’<div class="empty">No upcoming meetings.</div>’;
+h+=’</div></div>’;
+p.innerHTML=h;
+}
+
+// COMPLIANCE
+function pgComp(p){
+var fi=D.compliance.filter(function(c){return c.done;}).length;
+var to=D.compliance.length;
+var pct=Math.round(fi/to*100);
+var pc=pct>=80?”#6fd4a0”:pct>=50?”#e8c97a”:”#f87171”;
+var od=D.compliance.filter(function(c){return dU(c.due)<0&&!c.done;});
+var sn=D.compliance.filter(function(c){var d=dU(c.due);return d>=0&&d<=30&&!c.done;});
+var ok=D.compliance.filter(function(c){return dU(c.due)>30&&!c.done;});
+var dn=D.compliance.filter(function(c){return c.done;});
+var h=’<div class="ph"><div><div class="eye">Live Status</div><div class="ptitle">Compliance Status</div><div class="psub">’+fi+’/’+to+’ filings complete</div></div></div>’;
+h+=’<div style="background:#0d1b2a;padding:1.5rem;margin-bottom:1.5rem">’;
+h+=’<div style="display:flex;align-items:center;gap:2rem;flex-wrap:wrap">’;
+h+=’<div style="text-align:center"><div style="font-family:Cormorant Garamond,serif;font-size:4rem;font-weight:300;color:'+pc+';line-height:1">’+pct+’%</div><div style="font-size:.58rem;letter-spacing:.17em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:3px">Compliance Score</div></div>’;
+h+=’<div style="flex:1"><div style="height:10px;background:rgba(255,255,255,.1)"><div style="height:100%;background:'+pc+';width:'+pct+'%"></div></div>’;
+h+=’<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1rem">’;
+[{n:od.length,l:“Overdue”,c:”#f87171”},{n:sn.length,l:“Due This Month”,c:”#e8c97a”},{n:ok.length,l:“On Track”,c:“rgba(255,255,255,.5)”},{n:dn.length,l:“Filed”,c:”#6fd4a0”}].forEach(function(s){h+=’<div style="text-align:center"><div style="font-family:Cormorant Garamond,serif;font-size:1.8rem;color:'+s.c+';font-weight:300;line-height:1">’+s.n+’</div><div style="font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:3px">’+s.l+’</div></div>’;});
+h+=’</div></div></div></div>’;
+h+=’<div class="ibar b"><span>🔗</span><div><div class="ititle">Registry Checks</div><div class="ibody"><a href="https://bizfileonline.sos.ca.gov/search/business" target="_blank">CA BizFile →</a>  <a href="https://apps.irs.gov/app/eos/" target="_blank">IRS 501(c)(3) →</a>  <a href="https://rct.doj.ca.gov/Verification/Web/Search.aspx?facility=Y" target="_blank">CA AG Registry →</a></div></div></div>’;
+function rSec(title,items,cls){
+if(!items.length)return””;
+var s=’<div class="sdiv">’+title+’ (’+items.length+’)</div>’;
+items.forEach(function(c){
+var d=dU(c.due);
+s+=’<div class="comp '+cls+'">’;
+s+=’<div style="flex:1"><div style="font-weight:600;font-size:.88rem;margin-bottom:3px">’+c.task+’</div>’;
+s+=’<div style="font-size:.7rem;color:#7a7a8a;margin-bottom:4px">’+c.cat+’ · Due ‘+fmtD(c.due)+’</div>’;
+s+=’<div style="font-size:.76rem;font-weight:300;line-height:1.6">’+c.notes+’</div>’;
+if(c.done&&c.doneAt)s+=’<div style="font-size:.64rem;color:#2e6b4a;margin-top:3px;font-weight:600">Filed: ‘+c.doneAt+’</div>’;
+if(c.link)s+=’<a href="'+c.link+'" target="_blank" style="font-size:.68rem;color:#c9a84c;font-weight:700;text-decoration:none;display:block;margin-top:4px">’+(c.done?“View Resource →”:“File Now →”)+’</a>’;
+s+=’</div><div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end;flex-shrink:0">’;
+if(c.done)s+=’<span class="bdg bg">Filed</span>’;
+else s+=’<span style="color:'+uC(d)+';font-weight:700;font-size:.78rem">’+uL(d)+’</span>’;
+if(isA())s+=’<button class=“btn bsm ‘+(c.done?“bno”:“bng”)+’” onclick=“mComp(’+c.id+’)”>’+(c.done?“Reopen”:“Mark Filed”)+’</button>’;
+s+=’</div></div>’;
+});
+return s;
+}
+h+=rSec(“Overdue — File Immediately”,od,“r”);
+h+=rSec(“Due Within 30 Days”,sn,“a”);
+h+=rSec(“Upcoming — On Track”,ok,””);
+h+=rSec(“Filed & Complete”,dn,“g”);
+p.innerHTML=h;
+}
+function mComp(id){var now=fmtN();D.compliance=D.compliance.map(function(c){return c.id===id?Object.assign({},c,{done:!c.done,doneAt:!c.done?now:null}):c;});saveD(D);pgComp(el(“pg”));}
+
+// MEETINGS
+function pgMtgs(p){
+var s=D.meetings.slice().sort(function(a,b){return new Date(a.date)-new Date(b.date);});
+var h=’<div class="ph"><div><div class="ptitle">Meetings & Minutes</div><div class="psub">’+D.meetings.length+’ scheduled</div></div>’;
+if(isA())h+=’<button class="btn bnn bsm" onclick="addMtg()">+ Schedule</button>’;
+h+=’</div>’;
+s.forEach(function(m){
+h+=’<div class="mtg"><div class="mdate"><div class="mmo">’+fmtMo(m.date)+’</div><div class="mdy">’+fmtDy(m.date)+’</div></div>’;
+h+=’<div class="mbody"><div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px"><div class="mname">’+m.title+’</div><span class="'+sb(m.status)+'">’+m.status+’</span></div>’;
+h+=’<div class="mmeta">’+m.time+(m.loc?” · “+m.loc:””)+’</div>’;
+if(m.zoom)h+=’<a href="'+m.zoom+'" target="_blank" style="font-size:.68rem;color:#c9a84c;font-weight:700;text-decoration:none;display:block;margin-top:3px">Join Meeting →</a>’;
+if(m.agenda)h+=’<div style="font-size:.76rem;font-weight:300;margin-top:.5rem;line-height:1.6">’+m.agenda+’</div>’;
+h+=’<div style="margin-top:.6rem;display:flex;gap:4px">’;
+if(isA())h+=’<button class="btn bno bsm" onclick="editMtg('+m.id+')">Edit</button>’;
+if(m.mins)h+=’<button class="btn bng bsm" onclick="viewMins('+m.id+')">View Minutes</button>’;
+h+=’</div></div></div>’;
+});
+p.innerHTML=h;
+}
+function addMtg(){modal(“Schedule Meeting”,’<div class="fld"><label>Title</label><input class="inp" id="mt1"/></div><div class="f2"><div class="fld"><label>Date</label><input class="inp" type="date" id="mt2"/></div><div class="fld"><label>Time</label><input class="inp" id="mt3" placeholder="6:00 PM"/></div></div><div class="f2"><div class="fld"><label>Location</label><input class="inp" id="mt4"/></div><div class="fld"><label>Zoom Link</label><input class="inp" id="mt5" placeholder="https://..."/></div></div><div class="fld"><label>Agenda</label><textarea class="txa" id="mt6"></textarea></div>’,’<button class="btn bno" onclick="closeM()">Cancel</button><button class="btn bnn" onclick="saveMtg()">Save</button>’);}
+function saveMtg(){var t=el(“mt1”)?el(“mt1”).value.trim():””;if(!t)return;D.meetings.push({id:Date.now(),title:t,date:el(“mt2”).value,time:el(“mt3”).value,loc:el(“mt4”).value,zoom:el(“mt5”).value,agenda:el(“mt6”).value,status:“scheduled”,mins:””});saveD(D);closeM();pgMtgs(el(“pg”));}
+function editMtg(id){var m=D.meetings.filter(function(x){return x.id===id;})[0];if(!m)return;modal(“Edit Meeting”,’<div class="fld"><label>Title</label><input class=“inp” id=“em1” value=”’+m.title.replace(/”/g,”"”)+’”/></div><div class="f2"><div class="fld"><label>Date</label><input class="inp" type="date" id="em2" value="'+m.date+'"/></div><div class="fld"><label>Time</label><input class="inp" id="em3" value="'+m.time+'"/></div></div><div class="f2"><div class="fld"><label>Location</label><input class=“inp” id=“em4” value=”’+(m.loc||””)+’”/></div><div class="fld"><label>Zoom Link</label><input class=“inp” id=“em5” value=”’+(m.zoom||””)+’”/></div></div><div class="fld"><label>Agenda</label><textarea class="txa" id="em6">’+(m.agenda||””)+’</textarea></div><div class="fld"><label>Minutes</label><textarea class="txa" id="em7" style="min-height:100px">’+(m.mins||””)+’</textarea></div>’,’<button class="btn bno" onclick="closeM()">Cancel</button><button class="btn bnn" onclick="updMtg('+id+')">Save</button>’);}
+function updMtg(id){D.meetings=D.meetings.map(function(m){return m.id!==id?m:Object.assign({},m,{title:el(“em1”).value,date:el(“em2”).value,time:el(“em3”).value,loc:el(“em4”).value,zoom:el(“em5”).value,agenda:el(“em6”).value,mins:el(“em7”).value});});saveD(D);closeM();pgMtgs(el(“pg”));}
+function viewMins(id){var m=D.meetings.filter(function(x){return x.id===id;})[0];if(!m)return;modal(“Minutes — “+m.title,’<div style="font-size:.82rem;font-weight:300;line-height:1.85;white-space:pre-wrap">’+m.mins+’</div>’,’<button class="btn bnn" onclick="closeM()">Close</button>’);}
+
+// TODOS
+function pgTodos(p){
+var fl=p.dataset.fl||“open”;var cf=p.dataset.cf||“all”;
+var cats=[];D.todos.forEach(function(t){var c=t.cat||“General”;if(cats.indexOf(c)<0)cats.push(c);});
+var sh=D.todos.filter(function(t){var fo=fl===“all”?true:fl===“open”?!t.done:t.done;var co=cf===“all”?true:(t.cat||“General”)===cf;return fo&&co;}).sort(function(a,b){var pr={high:0,medium:1,low:2};return(pr[a.pri]||1)-(pr[b.pri]||1);});
+var oc=D.todos.filter(function(t){return !t.done;}).length;
+var dc=D.todos.filter(function(t){return t.done;}).length;
+var h=’<div class="ph"><div><div class="ptitle">To-Do List</div><div class="psub">’+oc+’ open · ‘+dc+’ completed</div></div><div class="acts">’;
+[“open”,“done”,“all”].forEach(function(f){h+=’<button class=“btn bsm ‘+(fl===f?“bnn”:“bno”)+’” onclick=“setF('’+f+’')”>’+(f===“open”?“Open”:f===“done”?“Completed”:“All”)+’</button>’;});
+if(isA())h+=’<button class="btn bsm bng" onclick="addTodo()">+ Add Task</button>’;
+h+=’</div></div>’;
+h+=’<div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem"><button class=“btn bsm ‘+(cf===“all”?“bnn”:“bno”)+’” onclick=“setCF('all')”>All</button>’;
+cats.forEach(function(c){h+=’<button class=“btn bsm ‘+(cf===c?“bnn”:“bno”)+’” onclick=“setCF('’+c.replace(/’/g,”\’”)+’')” style=“text-transform:capitalize”>’+c+’</button>’;});
+h+=’</div><div style="background:#fff;border:1px solid #ddd8cc">’;
+if(!sh.length)h+=’<div class="empty">No tasks here.</div>’;
+else sh.forEach(function(t){
+h+=’<div class="todo-row" style="opacity:'+(t.done?0.65:1)+'">’;
+h+=’<div class=“chk ‘+(t.done?“on”:””)+’” onclick=”’+(isA()?“togT(”+t.id+”)”:””)+’”></div>’;
+h+=’<div style="flex:1"><div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap"><span class=“todo-t ‘+(t.done?“done”:””)+’”>’+t.task+’</span>’;
+h+=’<span class=“bdg ‘+(t.pri===“high”?“br”:t.pri===“medium”?“ba”:“bx”)+’”>’+t.pri+’</span>’;
+h+=’<span class="bdg bx">’+(t.cat||“General”)+’</span></div>’;
+h+=’<div class="todo-m">Due ‘+fmtD(t.due)+(t.who?” · “+t.who:””)+(t.ref?’ <a href="'+t.ref+'" target="_blank" style="color:#c9a84c;font-weight:700;text-decoration:none;font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;margin-left:.3rem">Ref →</a>’:””)+’</div>’;
+if(t.note)h+=’<div class="todo-n">’+t.note+’</div>’;
+if(t.done&&t.doneAt)h+=’<div class="todo-ts">Completed ‘+t.doneAt+’</div>’;
+h+=’</div>’;
+if(isA())h+=’<button class="btn bno bsm" onclick="editT('+t.id+')">Edit</button>’;
+h+=’</div>’;
+});
+h+=’</div>’;
+p.innerHTML=h;
+}
+function setF(f){el(“pg”).dataset.fl=f;pgTodos(el(“pg”));}
+function setCF(c){el(“pg”).dataset.cf=c;pgTodos(el(“pg”));}
+function togT(id){var n=fmtN();D.todos=D.todos.map(function(t){return t.id===id?Object.assign({},t,{done:!t.done,doneAt:!t.done?n:null}):t;});saveD(D);pgTodos(el(“pg”));}
+function addTodo(){modal(“New Task”,’<div class="fld"><label>Task</label><input class="inp" id="td1"/></div><div class="f2"><div class="fld"><label>Due Date</label><input class="inp" type="date" id="td2"/></div><div class="fld"><label>Assigned To</label><input class="inp" id="td3" value="Lance"/></div></div><div class="f2"><div class="fld"><label>Priority</label><select class="sel" id="td4"><option>high</option><option>medium</option><option>low</option></select></div><div class="fld"><label>Category</label><select class="sel" id="td5"><option>Compliance</option><option>Tax Filing</option><option>State Filing</option><option>Governance</option><option>Infrastructure</option><option>Events</option><option>Grants</option><option>General</option></select></div></div><div class="fld"><label>Notes</label><textarea class="txa" id="td6"></textarea></div><div class="fld"><label>Reference Link</label><input class="inp" id="td7" placeholder="https://..."/></div>’,’<button class="btn bno" onclick="closeM()">Cancel</button><button class="btn bnn" onclick="saveTodo()">Save</button>’);}
+function saveTodo(){var t=el(“td1”)?el(“td1”).value.trim():””;if(!t)return;D.todos.push({id:Date.now(),task:t,due:el(“td2”).value,who:el(“td3”).value,pri:el(“td4”).value,cat:el(“td5”).value,note:el(“td6”).value,ref:el(“td7”).value,done:false,doneAt:null});saveD(D);closeM();pgTodos(el(“pg”));}
+function editT(id){var t=D.todos.filter(function(x){return x.id===id;})[0];if(!t)return;modal(“Edit Task”,’<div class="fld"><label>Task</label><input class=“inp” id=“et1” value=”’+t.task.replace(/”/g,”"”)+’”/></div><div class="f2"><div class="fld"><label>Due</label><input class="inp" type="date" id="et2" value="'+t.due+'"/></div><div class="fld"><label>Assignee</label><input class=“inp” id=“et3” value=”’+(t.who||””)+’”/></div></div><div class="fld"><label>Notes</label><textarea class="txa" id="et4">’+(t.note||””)+’</textarea></div><div class="fld"><label>Ref Link</label><input class=“inp” id=“et5” value=”’+(t.ref||””)+’”/></div>’,’<button class="btn bno" onclick="closeM()">Cancel</button><button class="btn bno" onclick="delT('+id+')">Delete</button><button class="btn bnn" onclick="updT('+id+')">Save</button>’);}
+function updT(id){D.todos=D.todos.map(function(t){return t.id!==id?t:Object.assign({},t,{task:el(“et1”).value,due:el(“et2”).value,who:el(“et3”).value,note:el(“et4”).value,ref:el(“et5”).value});});saveD(D);closeM();pgTodos(el(“pg”));}
+function delT(id){D.todos=D.todos.filter(function(t){return t.id!==id;});saveD(D);closeM();pgTodos(el(“pg”));}
+
+// EVENTS
+function pgEvts(p){
+var sel=parseInt(p.dataset.sel||“0”);
+var ev=sel?D.events.filter(function(e){return e.id===sel;})[0]:null;
+var CATS=[“Location & Venue”,“Speakers & Presenters”,“Outreach & Marketing”,“Fundraising”,“Supplies & Materials”,“Grant Support”,“Designated Responsibilities”,“Thank You Letters”,“General”];
+if(!ev){
+var h=’<div class="ph"><div><div class="ptitle">Events</div><div class="psub">’+D.events.length+’ event(s)</div></div>’;
+if(isA())h+=’<button class="btn bng bsm" onclick="addEv()">+ New Event</button>’;
+h+=’</div>’;
+D.events.forEach(function(e){
+var dn=e.tasks.filter(function(t){return t.done;}).length,to=e.tasks.length,pct=to?Math.round(dn/to*100):0;
+h+=’<div class="card" style="cursor:pointer" onclick="selEv('+e.id+')">’;
+h+=’<div style="display:flex;justify-content:space-between;margin-bottom:.5rem"><div class="ctitle">’+e.name+’</div><span class="'+sb(e.status)+'">’+e.status+’</span></div>’;
+h+=’<div style="font-size:.78rem;color:#7a7a8a;margin-bottom:.5rem">’+fmtD(e.date)+’ · ‘+e.loc+’</div>’;
+h+=’<div style="font-size:.65rem;color:#7a7a8a;margin-bottom:4px">Progress: ‘+pct+’% (’+dn+’/’+to+’ tasks)</div>’;
+h+=’<div style="height:4px;background:#ddd8cc"><div style="height:100%;background:#c9a84c;width:'+pct+'%"></div></div></div>’;
+});
+p.innerHTML=h;return;
+}
+var dn=ev.tasks.filter(function(t){return t.done;}).length,to=ev.tasks.length,pct=to?Math.round(dn/to*100):0;
+var grp={};ev.tasks.forEach(function(t){var c=t.cat||“General”;if(!grp[c])grp[c]=[];grp[c].push(t);});
+var h=’<div class="ph"><div><div class="ptitle">’+ev.name+’</div><div class="psub">’+fmtD(ev.date)+’ · ‘+ev.loc+’</div></div>’;
+h+=’<div class="acts"><button class="btn bno bsm" onclick="clearEv()">Back</button>’;
+if(isA())h+=’<button class="btn bng bsm" onclick="addEvTask('+ev.id+')">+ Task</button>’;
+h+=’</div></div>’;
+h+=’<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">’;
+h+=’<div class="card"><div style="font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:#c9a84c;font-weight:600;margin-bottom:.4rem">Vision</div><div style="font-family:Cormorant Garamond,serif;font-size:.96rem;line-height:1.8;font-style:italic">’+(ev.vision||“Not set.”)+’</div></div>’;
+h+=’<div class="card"><div style="font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:#c9a84c;font-weight:600;margin-bottom:.4rem">Goals</div><div style="font-size:.8rem;font-weight:300;line-height:1.85;white-space:pre-line">’+(ev.goals||“Not set.”)+’</div></div></div>’;
+h+=’<div style="background:#fff;border:1px solid #ddd8cc"><div style="background:#0d1b2a;padding:.75rem 1.25rem"><div style="font-family:Cormorant Garamond,serif;font-size:.95rem;color:#fff">Tasks — ‘+dn+’/’+to+’ Complete</div></div>’;
+CATS.forEach(function(cat){
+if(!grp[cat])return;
+h+=’<div style="padding:.9rem 1.25rem;border-bottom:1px solid #f0ebe0">’;
+h+=’<div style="font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:#c9a84c;font-weight:700;margin-bottom:.5rem;padding-bottom:.35rem;border-bottom:1px solid #f0ebe0">’+cat+’ — ‘+grp[cat].filter(function(t){return t.done;}).length+’/’+grp[cat].length+’</div>’;
+grp[cat].forEach(function(t){
+h+=’<div style="display:flex;align-items:flex-start;gap:.65rem;padding:.6rem 0;border-bottom:1px solid #f8f5ef;opacity:'+(t.done?0.65:1)+'">’;
+h+=’<div class=“chk ‘+(t.done?“on”:””)+’” onclick=“togEvT(’+ev.id+’,’+t.id+’)”></div>’;
+h+=’<div style="flex:1"><div style=“font-size:.82rem;font-weight:500;’+(t.done?“text-decoration:line-through;color:#7a7a8a”:””)+’”>’+t.name+’</div>’;
+h+=’<div style="font-size:.65rem;color:#7a7a8a;margin-top:2px">’+(t.due?“Due “+fmtD(t.due):””)+(t.who?” · “+t.who:””)+’</div>’;
+if(t.note)h+=’<div class="todo-n">’+t.note+’</div>’;
+if(t.done&&t.doneAt)h+=’<div class="todo-ts">Completed ‘+t.doneAt+’</div>’;
+h+=’</div></div>’;
+});
+h+=’</div>’;
+});
+h+=’</div>’;
+p.innerHTML=h;
+}
+function selEv(id){el(“pg”).dataset.sel=id;pgEvts(el(“pg”));}
+function clearEv(){el(“pg”).dataset.sel=””;pgEvts(el(“pg”));}
+function togEvT(eid,tid){var n=fmtN();D.events=D.events.map(function(e){return e.id!==eid?e:Object.assign({},e,{tasks:e.tasks.map(function(t){return t.id!==tid?t:Object.assign({},t,{done:!t.done,doneAt:!t.done?n:null});})});});saveD(D);pgEvts(el(“pg”));}
+function addEv(){modal(“New Event”,’<div class="fld"><label>Event Name</label><input class="inp" id="ev1"/></div><div class="f2"><div class="fld"><label>Date</label><input class="inp" type="date" id="ev2"/></div><div class="fld"><label>Location</label><input class="inp" id="ev3"/></div></div><div class="fld"><label>Budget ($)</label><input class="inp" type="number" id="ev4" value="0"/></div><div class="fld"><label>Vision</label><textarea class="txa" id="ev5"></textarea></div><div class="fld"><label>Goals</label><textarea class="txa" id="ev6" placeholder="1. Goal one&#10;2. Goal two..."></textarea></div>’,’<button class="btn bno" onclick="closeM()">Cancel</button><button class="btn bnn" onclick="saveEv()">Create</button>’);}
+function saveEv(){var n=el(“ev1”)?el(“ev1”).value.trim():””;if(!n)return;D.events.push({id:Date.now(),name:n,date:el(“ev2”).value,loc:el(“ev3”).value,status:“planning”,vision:el(“ev5”).value,goals:el(“ev6”).value,budget:Number(el(“ev4”).value)||0,tasks:[]});saveD(D);closeM();pgEvts(el(“pg”));}
+function addEvTask(eid){modal(“Add Task”,’<div class="fld"><label>Task Name</label><input class="inp" id="et1"/></div><div class="f2"><div class="fld"><label>Category</label><select class="sel" id="et2"><option>Location & Venue</option><option>Speakers & Presenters</option><option>Outreach & Marketing</option><option>Fundraising</option><option>Supplies & Materials</option><option>Grant Support</option><option>Designated Responsibilities</option><option>Thank You Letters</option><option>General</option></select></div><div class="fld"><label>Priority</label><select class="sel" id="et3"><option>high</option><option>medium</option><option>low</option></select></div></div><div class="f2"><div class="fld"><label>Due Date</label><input class="inp" type="date" id="et4"/></div><div class="fld"><label>Assigned To</label><input class="inp" id="et5"/></div></div><div class="fld"><label>Notes</label><textarea class="txa" id="et6"></textarea></div>’,’<button class="btn bno" onclick="closeM()">Cancel</button><button class="btn bnn" onclick="saveEvT('+eid+')">Save</button>’);}
+function saveEvT(eid){var n=el(“et1”)?el(“et1”).value.trim():””;if(!n)return;D.events=D.events.map(function(e){return e.id!==eid?e:Object.assign({},e,{tasks:e.tasks.concat([{id:Date.now(),name:n,cat:el(“et2”).value,due:el(“et4”).value,who:el(“et5”).value,pri:el(“et3”).value,note:el(“et6”).value,done:false,doneAt:null}])});});saveD(D);closeM();pgEvts(el(“pg”));}
+
+// GRANTS
+function pgGrants(p){
+var tot=D.grants.filter(function(g){return !g.done;}).reduce(function(s,g){return s+(g.amt||0);},0);
+var h=’<div class="ph"><div><div class="ptitle">Grant Pipeline</div><div class="psub">’+fmtM(tot)+’ potential</div></div>’;
+if(isA())h+=’<button class="btn bnn bsm" onclick="addGr()">+ Add Grant</button>’;
+h+=’</div>’;
+D.grants.forEach(function(g){
+var d=dU(g.dl);
+h+=’<div class="card" style="opacity:'+(g.done?0.75:1)+'">’;
+h+=’<div style="display:flex;justify-content:space-between;margin-bottom:.5rem"><div class="ctitle">’+g.name+’</div><span class="'+sb(g.status)+'">’+g.status+’</span></div>’;
+h+=’<div style="display:flex;gap:1.5rem;margin-bottom:.5rem"><div><div style="font-size:.56rem;text-transform:uppercase;letter-spacing:.1em;color:#7a7a8a">Amount</div><div style="font-family:Cormorant Garamond,serif;font-size:1.4rem">’+fmtM(g.amt)+’</div></div>’;
+h+=’<div><div style="font-size:.56rem;text-transform:uppercase;letter-spacing:.1em;color:#7a7a8a">Deadline</div><div style="font-size:.85rem;font-weight:500;color:'+uC(d)+'">’+fmtD(g.dl)+’</div><div style="font-size:.67rem;color:'+uC(d)+'">’+(g.done?“Submitted”:uL(d))+’</div></div></div>’;
+h+=’<div style="font-size:.8rem;color:#7a7a8a;font-weight:300;margin-bottom:.6rem">’+(g.notes||””)+’</div>’;
+h+=’<div style="display:flex;gap:.4rem;align-items:center"><span class="bdg bx">’+g.cat+’</span>’;
+if(isA())h+=’<div style="margin-left:auto;display:flex;gap:4px"><button class="btn bno bsm" onclick="editGr('+g.id+')">Edit</button><button class=“btn bsm ‘+(g.done?“bno”:“bng”)+’” onclick=“togGr(’+g.id+’)”>’+(g.done?“Reopen”:“Submitted”)+’</button></div>’;
+h+=’</div></div>’;
+});
+p.innerHTML=h;
+}
+function togGr(id){D.grants=D.grants.map(function(g){return g.id===id?Object.assign({},g,{done:!g.done}):g;});saveD(D);pgGrants(el(“pg”));}
+function addGr(){modal(“Add Grant”,’<div class="fld"><label>Grant Name</label><input class="inp" id="gr1"/></div><div class="f2"><div class="fld"><label>Amount ($)</label><input class="inp" type="number" id="gr2" value="0"/></div><div class="fld"><label>Deadline</label><input class="inp" type="date" id="gr3"/></div></div><div class="f2"><div class="fld"><label>Category</label><input class="inp" id="gr4"/></div><div class="fld"><label>Status</label><select class="sel" id="gr5"><option>research</option><option>draft</option><option>submitted</option><option>awarded</option><option>declined</option></select></div></div><div class="fld"><label>Notes</label><textarea class="txa" id="gr6"></textarea></div>’,’<button class="btn bno" onclick="closeM()">Cancel</button><button class="btn bnn" onclick="saveGr()">Save</button>’);}
+function saveGr(){var n=el(“gr1”)?el(“gr1”).value.trim():””;if(!n)return;D.grants.push({id:Date.now(),name:n,amt:Number(el(“gr2”).value)||0,dl:el(“gr3”).value,cat:el(“gr4”).value,status:el(“gr5”).value,notes:el(“gr6”).value,done:false});saveD(D);closeM();pgGrants(el(“pg”));}
+function editGr(id){var g=D.grants.filter(function(x){return x.id===id;})[0];if(!g)return;modal(“Edit Grant”,’<div class="fld"><label>Name</label><input class=“inp” id=“eg1” value=”’+g.name.replace(/”/g,”"”)+’”/></div><div class="f2"><div class="fld"><label>Amount</label><input class="inp" type="number" id="eg2" value="'+g.amt+'"/></div><div class="fld"><label>Deadline</label><input class="inp" type="date" id="eg3" value="'+g.dl+'"/></div></div><div class="fld"><label>Notes</label><textarea class="txa" id="eg4">’+(g.notes||””)+’</textarea></div>’,’<button class="btn bno" onclick="closeM()">Cancel</button><button class="btn bnn" onclick="updGr('+id+')">Save</button>’);}
+function updGr(id){D.grants=D.grants.map(function(g){return g.id!==id?g:Object.assign({},g,{name:el(“eg1”).value,amt:Number(el(“eg2”).value)||0,dl:el(“eg3”).value,notes:el(“eg4”).value});});saveD(D);closeM();pgGrants(el(“pg”));}
+
+// BOARD DIR
+function pgBdir(p){
+var h=’<div class="ph"><div><div class="ptitle">Board & Staff</div><div class="psub">’+D.board.filter(function(b){return b.status===“active”;}).length+’ active</div></div>’;
+if(isA())h+=’<button class="btn bng bsm" onclick="addBM()">+ Add</button>’;
+h+=’</div><div class="cg">’;
+D.board.forEach(function(b){
+h+=’<div style="background:#fff;border:1px solid #ddd8cc;overflow:hidden">’;
+h+=’<div style="background:#0d1b2a;padding:1rem 1.25rem;display:flex;align-items:flex-start;justify-content:space-between">’;
+h+=’<div><div style="font-family:Cormorant Garamond,serif;font-size:1.05rem;color:#fff">’+(b.status===“vacant”?“Vacant”:b.name)+’</div><div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#c9a84c;margin-top:2px">’+b.role+’</div></div>’;
+h+=’<span class="'+sb(b.status)+'">’+b.status+’</span></div>’;
+h+=’<div style="padding:1rem 1.25rem">’;
+if(b.term)h+=’<div style="font-size:.65rem;color:#7a7a8a;margin-bottom:.5rem">Term ends: ‘+fmtD(b.term)+’</div>’;
+(b.resp||[]).forEach(function(r){h+=’<div style="display:flex;gap:.5rem;font-size:.78rem;font-weight:300;padding:.28rem 0;border-bottom:1px solid #f0ebe0"><span style="color:#c9a84c;flex-shrink:0;font-size:.45rem;margin-top:5px">◆</span><span>’+r+’</span></div>’;});
+h+=’</div></div>’;
+});
+h+=’</div>’;
+p.innerHTML=h;
+}
+function addBM(){modal(“Add Board Member”,’<div class="f2"><div class="fld"><label>Name</label><input class="inp" id="bm1"/></div><div class="fld"><label>Role</label><input class="inp" id="bm2"/></div></div><div class="f2"><div class="fld"><label>Status</label><select class="sel" id="bm3"><option>active</option><option>vacant</option><option>inactive</option></select></div><div class="fld"><label>Email</label><input class="inp" id="bm4"/></div></div><div class="fld"><label>Term End</label><input class="inp" type="date" id="bm5"/></div><div class="fld"><label>Responsibilities (one per line)</label><textarea class="txa" id="bm6"></textarea></div>’,’<button class="btn bno" onclick="closeM()">Cancel</button><button class="btn bnn" onclick="saveBM()">Save</button>’);}
+function saveBM(){D.board.push({id:Date.now(),name:el(“bm1”).value,role:el(“bm2”).value,status:el(“bm3”).value,email:el(“bm4”).value,term:el(“bm5”).value,resp:el(“bm6”).value.split(”\n”).filter(function(r){return r.trim();})});saveD(D);closeM();pgBdir(el(“pg”));}
+
+// VOTES
+function pgVotes(p){
+var h=’<div class="ph"><div><div class="ptitle">Votes & Decisions</div><div class="psub">’+D.votes.length+’ recorded</div></div>’;
+if(isA())h+=’<button class="btn bnn bsm" onclick="addV()">+ Record Vote</button>’;
+h+=’</div>’;
+D.votes.slice().sort(function(a,b){return new Date(b.date)-new Date(a.date);}).forEach(function(v){
+h+=’<div class="card"><div style="display:flex;gap:1.25rem"><div style="min-width:60px;text-align:center"><div style="font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:#c9a84c;font-weight:700">’+fmtMo(v.date)+’</div><div style="font-family:Cormorant Garamond,serif;font-size:1.7rem;color:#0d1b2a;line-height:1">’+fmtDy(v.date)+’</div></div>’;
+h+=’<div style="flex:1"><div style="font-weight:600;font-size:.88rem">’+v.title+’</div><div style="display:flex;gap:.4rem;margin:.35rem 0;flex-wrap:wrap"><span class="'+sb(v.result)+'">’+v.result+’</span><span style="font-size:.7rem;color:#7a7a8a">Yea: ‘+v.yea+’ · Nay: ‘+v.nay+’ · Abstain: ‘+v.abs+’</span></div>’;
+if(v.notes)h+=’<div style="font-size:.78rem;font-weight:300;line-height:1.6">’+v.notes+’</div>’;
+h+=’</div></div></div>’;
+});
+p.innerHTML=h;
+}
+function addV(){modal(“Record Vote”,’<div class="fld"><label>Resolution</label><input class="inp" id="v1"/></div><div class="f2"><div class="fld"><label>Date</label><input class="inp" type="date" id="v2"/></div><div class="fld"><label>Result</label><select class="sel" id="v3"><option>passed</option><option>failed</option><option>tabled</option><option>proposed</option></select></div></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.85rem"><div class="fld"><label>Yea</label><input class="inp" type="number" id="v4" value="0"/></div><div class="fld"><label>Nay</label><input class="inp" type="number" id="v5" value="0"/></div><div class="fld"><label>Abstain</label><input class="inp" type="number" id="v6" value="0"/></div></div><div class="fld"><label>Notes</label><textarea class="txa" id="v7"></textarea></div>’,’<button class="btn bno" onclick="closeM()">Cancel</button><button class="btn bnn" onclick="saveV()">Save</button>’);}
+function saveV(){D.votes.push({id:Date.now(),title:el(“v1”).value,date:el(“v2”).value,result:el(“v3”).value,yea:Number(el(“v4”).value),nay:Number(el(“v5”).value),abs:Number(el(“v6”).value),notes:el(“v7”).value});saveD(D);closeM();pgVotes(el(“pg”));}
+
+// DOCUMENTS
+function pgDocs(p){
+var arch=p.dataset.arch===“true”;
+var sh=D.docs.filter(function(d){return arch?d.arch:!d.arch;});
+var grp={};sh.forEach(function(d){if(!grp[d.cat])grp[d.cat]=[];grp[d.cat].push(d);});
+var h=’<div class="ph"><div><div class="ptitle">Document Vault</div><div class="psub">Files in Google Drive</div></div><div class="acts"><button class=“btn bsm ‘+(!arch?“bnn”:“bno”)+’” onclick=“setArch(false)”>Active</button><button class=“btn bsm ‘+(arch?“bnn”:“bno”)+’” onclick=“setArch(true)”>Archive</button>’;
+if(isA())h+=’<button class="btn bng bsm" onclick="addDoc()">+ Add</button>’;
+h+=’</div></div>’;
+if(arch&&!isA()){h+=’<div class="ibar r"><span>🔒</span><div><div class="ititle">Admin Access Required</div><div class="ibody">Contact Lance for archived documents.</div></div></div>’;p.innerHTML=h;return;}
+Object.keys(grp).forEach(function(cat){
+h+=’<div class="sdiv">’+cat+’</div><div style="background:#fff;border:1px solid #ddd8cc;margin-bottom:.85rem">’;
+grp[cat].forEach(function(d){
+h+=’<div class="dr"><div style="font-size:1rem;opacity:.65;width:22px;flex-shrink:0">📄</div><div style="flex:1"><div class="dn">’+d.name+’</div><div class="dm">’+(d.date?fmtD(d.date):””)+(d.notes?” · “+d.notes:””)+’</div></div>’;
+h+=d.link?’<a href="'+d.link+'" target="_blank" class="dl">Open →</a>’:’<span style="font-size:.66rem;color:#7a7a8a;font-style:italic">No link</span>’;
+if(isA())h+=’<div style="display:flex;gap:3px;margin-left:.5rem"><button class="btn bno bsm" onclick="editDoc('+d.id+')">Edit</button><button class="btn bno bsm" onclick="archDoc('+d.id+')">’+(d.arch?“Restore”:“Archive”)+’</button></div>’;
+h+=’</div>’;
+});
+h+=’</div>’;
+});
+p.innerHTML=h;
+}
+function setArch(a){el(“pg”).dataset.arch=a;pgDocs(el(“pg”));}
+function archDoc(id){D.docs=D.docs.map(function(d){return d.id===id?Object.assign({},d,{arch:!d.arch}):d;});saveD(D);pgDocs(el(“pg”));}
+function addDoc(){modal(“Add Document”,’<div class="fld"><label>Name</label><input class="inp" id="dc1"/></div><div class="f2"><div class="fld"><label>Category</label><select class="sel" id="dc2"><option>Governance</option><option>Tax & Legal</option><option>Records</option><option>Finance</option><option>Grants</option><option>HR</option><option>Communications</option></select></div><div class="fld"><label>Date</label><input class="inp" type="date" id="dc3"/></div></div><div class="fld"><label>Google Drive Link</label><input class="inp" id="dc4" placeholder="https://drive.google.com/..."/></div><div class="fld"><label>Notes</label><textarea class="txa" id="dc5"></textarea></div>’,’<button class="btn bno" onclick="closeM()">Cancel</button><button class="btn bnn" onclick="saveDoc()">Save</button>’);}
+function saveDoc(){D.docs.push({id:Date.now(),name:el(“dc1”).value,cat:el(“dc2”).value,date:el(“dc3”).value,link:el(“dc4”).value,notes:el(“dc5”).value,arch:false});saveD(D);closeM();pgDocs(el(“pg”));}
+function editDoc(id){var d=D.docs.filter(function(x){return x.id===id;})[0];if(!d)return;modal(“Edit Document”,’<div class="fld"><label>Name</label><input class=“inp” id=“ed1” value=”’+d.name.replace(/”/g,”"”)+’”/></div><div class="f2"><div class="fld"><label>Date</label><input class=“inp” type=“date” id=“ed2” value=”’+(d.date||””)+’”/></div></div><div class="fld"><label>Drive Link</label><input class=“inp” id=“ed3” value=”’+(d.link||””)+’”/></div><div class="fld"><label>Notes</label><textarea class="txa" id="ed4">’+(d.notes||””)+’</textarea></div>’,’<button class="btn bno" onclick="closeM()">Cancel</button><button class="btn bnn" onclick="updDoc('+id+')">Save</button>’);}
+function updDoc(id){D.docs=D.docs.map(function(d){return d.id!==id?d:Object.assign({},d,{name:el(“ed1”).value,date:el(“ed2”).value,link:el(“ed3”).value,notes:el(“ed4”).value});});saveD(D);closeM();pgDocs(el(“pg”));}
+
+// FOLDERS
+function pgFold(p){
+var MBS=[“Mia”,“Edward”,“Nina”,“Maisha”,“Lance”];
+var ac=p.dataset.fm||“Mia”;
+var flds=D.folders||{};var items=flds[ac]||[];
+var h=’<div class="ph"><div><div class="ptitle">Member Folders</div></div>’;
+if(isA())h+=’<button class="btn bnn bsm" onclick="addFI()">+ Add Item</button>’;
+h+=’</div><div style="display:flex;gap:0;border-bottom:1px solid #ddd8cc;margin-bottom:1.25rem">’;
+MBS.forEach(function(m){h+=’<button class=“ntab ‘+(ac===m?“on”:””)+’” onclick=“setFM('’+m+’'”>’+m+’ (’+((flds[m]||[]).length)+’)</button>’;});
+h+=’</div>’;
+if(!items.length)h+=’<div class="empty">No items in ‘+ac+”‘s folder yet.</div>”;
+items.forEach(function(i){
+h+=’<div class="dr"><div style="font-size:1rem">’+(i.type===“Note”?“📝”:“📄”)+’</div><div style="flex:1"><div class="dn">’+i.name+’</div><div class="dm">’+i.type+(i.notes?” · “+i.notes:””)+’</div></div>’;
+if(i.link)h+=’<a href="'+i.link+'" target="_blank" class="dl">Open →</a>’;
+if(isA())h+=’<button class="btn bno bsm" style="margin-left:.4rem" onclick="rmFI(\''+ac+'\','+i.fid+')">Remove</button>’;
+h+=’</div>’;
+});
+p.innerHTML=h;
+}
+function setFM(m){el(“pg”).dataset.fm=m;pgFold(el(“pg”));}
+function rmFI(mb,fid){if(!D.folders)D.folders={};D.folders[mb]=(D.folders[mb]||[]).filter(function(i){return i.fid!==fid;});saveD(D);pgFold(el(“pg”));}
+function addFI(){var ac=el(“pg”).dataset.fm||“Mia”;modal(“Add Item to Folder”,’<div class="fld"><label>Item Name</label><input class="inp" id="fi1"/></div><div class="f2"><div class="fld"><label>Type</label><select class="sel" id="fi2"><option>Note</option><option>Document</option><option>Task</option><option>Resource</option></select></div><div class="fld"><label>Member</label><select class="sel" id="fi3"><option>Mia</option><option>Edward</option><option>Nina</option><option>Maisha</option><option>Lance</option></select></div></div><div class="fld"><label>Drive Link</label><input class="inp" id="fi4" placeholder="https://drive.google.com/..."/></div><div class="fld"><label>Notes</label><textarea class="txa" id="fi5"></textarea></div>’,’<button class="btn bno" onclick="closeM()">Cancel</button><button class="btn bnn" onclick="saveFI()">Add</button>’);setTimeout(function(){var s=el(“fi3”);if(s)s.value=ac;},50);}
+function saveFI(){var mb=el(“fi3”)?el(“fi3”).value:“Mia”;if(!D.folders)D.folders={};if(!D.folders[mb])D.folders[mb]=[];D.folders[mb].push({name:el(“fi1”).value,type:el(“fi2”).value,link:el(“fi4”).value,notes:el(“fi5”).value,fid:Date.now()});saveD(D);closeM();pgFold(el(“pg”));}
+
+// FINANCIALS
+function pgFin(p){
+var h=’<div class="ph"><div><div class="ptitle">Financials</div><div class="psub">Admin only · Keep 7+ years</div></div><button class="btn bnn bsm" onclick="addFin()">+ Add Record</button></div>’;
+h+=’<div class="ibar"><span>🏦</span><div><div class="ititle">Record-Keeping</div><div class="ibody">Upload each bank statement to Google Drive monthly and paste the link here. Minimum 7-year retention required.</div></div></div>’;
+h+=’<div class="tw"><table><thead><tr><th>Document</th><th>Month</th><th>Type</th><th>Amount</th><th>Drive</th><th>Status</th><th></th></tr></thead><tbody>’;
+D.financials.forEach(function(f){
+h+=’<tr style="opacity:'+(f.filed?0.75:1)+'"><td style="font-weight:500">’+f.name+’</td>’;
+h+=’<td style="font-weight:300">’+(f.month?new Date(f.month+”-01”).toLocaleDateString(“en-US”,{month:“long”,year:“numeric”}):””)+’</td>’;
+h+=’<td><span class="bdg bx">’+f.type+’</span></td>’;
+h+=’<td style="font-weight:300">’+(f.amt||”—”)+’</td>’;
+h+=’<td>’+(f.link?’<a href="'+f.link+'" target="_blank" class="dl">View →</a>’:’<span style="font-size:.66rem;color:#7a7a8a;font-style:italic">No link</span>’)+’</td>’;
+h+=’<td><span class=“bdg ‘+(f.filed?“bg”:“ba”)+’”>’+(f.filed?“Filed”:“Pending”)+’</span></td>’;
+h+=’<td><div style="display:flex;gap:3px"><button class="btn bno bsm" onclick="editFin('+f.id+')">Edit</button><button class=“btn bsm ‘+(f.filed?“bno”:“bng”)+’” onclick=“togFin(’+f.id+’)”>’+(f.filed?“Unfile”:“Filed”)+’</button></div></td></tr>’;
+});
+h+=’</tbody></table></div>’;
+p.innerHTML=h;
+}
+function togFin(id){D.financials=D.financials.map(function(f){return f.id===id?Object.assign({},f,{filed:!f.filed}):f;});saveD(D);pgFin(el(“pg”));}
+function addFin(){modal(“Add Financial Record”,’<div class="fld"><label>Document Name</label><input class="inp" id="fn1"/></div><div class="f2"><div class="fld"><label>Month</label><input class="inp" type="month" id="fn2"/></div><div class="fld"><label>Type</label><select class="sel" id="fn3"><option>Bank Statement</option><option>Tax Filing</option><option>Budget</option><option>Expense Report</option><option>Donation Record</option><option>Invoice</option></select></div></div><div class="fld"><label>Amount</label><input class="inp" id="fn4" placeholder="$0.00"/></div><div class="fld"><label>Google Drive Link</label><input class="inp" id="fn5" placeholder="https://drive.google.com/..."/></div>’,’<button class="btn bno" onclick="closeM()">Cancel</button><button class="btn bnn" onclick="saveFin()">Save</button>’);}
+function saveFin(){D.financials.push({id:Date.now(),name:el(“fn1”).value,month:el(“fn2”).value,type:el(“fn3”).value,amt:el(“fn4”).value,link:el(“fn5”).value,filed:false});saveD(D);closeM();pgFin(el(“pg”));}
+function editFin(id){var f=D.financials.filter(function(x){return x.id===id;})[0];if(!f)return;modal(“Edit Record”,’<div class="fld"><label>Name</label><input class=“inp” id=“ef1” value=”’+f.name.replace(/”/g,”"”)+’”/></div><div class="f2"><div class="fld"><label>Month</label><input class=“inp” type=“month” id=“ef2” value=”’+(f.month||””)+’”/></div></div><div class="fld"><label>Amount</label><input class=“inp” id=“ef3” value=”’+(f.amt||””)+’”/></div><div class="fld"><label>Drive Link</label><input class=“inp” id=“ef4” value=”’+(f.link||””)+’”/></div>’,’<button class="btn bno" onclick="closeM()">Cancel</button><button class="btn bnn" onclick="updFin('+id+')">Save</button>’);}
+function updFin(id){D.financials=D.financials.map(function(f){return f.id!==id?f:Object.assign({},f,{name:el(“ef1”).value,month:el(“ef2”).value,amt:el(“ef3”).value,link:el(“ef4”).value});});saveD(D);closeM();pgFin(el(“pg”));}
+
+// ISSUES
+function pgIss(p){
+var h=’<div class="ph"><div><div class="ptitle">Issues & Risks</div><div class="psub">’+D.issues.filter(function(i){return i.status===“open”;}).length+’ open</div></div><button class="btn bnn bsm" onclick="addIss()">+ Log Issue</button></div>’;
+D.issues.forEach(function(i){
+var col=i.pri===“critical”?”#8b2020”:i.pri===“high”?”#9a6b10”:i.status===“resolved”?”#2e6b4a”:”#9a6b10”;
+h+=’<div style=“background:#fff;border:1px solid #ddd8cc;border-left:4px solid ‘+col+’;padding:1rem 1.25rem;margin-bottom:.75rem;opacity:’+(i.status===“resolved”?0.75:1)+’”>’;
+h+=’<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px"><div><div style="font-weight:600;font-size:.88rem">’+i.title+’</div><div style="font-size:.7rem;color:#7a7a8a;margin-top:2px"><span class="'+sb(i.pri)+'">’+i.pri+’</span> · ‘+i.status+(i.owner?” · “+i.owner:””)+’</div></div>’;
+h+=’<div style="display:flex;gap:3px"><button class="btn bno bsm" onclick="editIss('+i.id+')">Edit</button><button class=“btn bsm ‘+(i.status===“open”?“bng”:“bno”)+’” onclick=“togIss(’+i.id+’)”>’+(i.status===“open”?“Resolve”:“Reopen”)+’</button></div></div>’;
+if(i.notes)h+=’<div style="font-size:.78rem;font-weight:300;line-height:1.6;margin-top:.5rem">’+i.notes+’</div>’;
+if(i.res)h+=’<div style="margin-top:.5rem;font-size:.76rem;color:#2e6b4a;font-weight:300"><strong>Resolution:</strong> ‘+i.res+’</div>’;
+h+=’</div>’;
+});
+p.innerHTML=h;
+}
+function togIss(id){D.issues=D.issues.map(function(i){return i.id===id?Object.assign({},i,{status:i.status===“open”?“resolved”:“open”}):i;});saveD(D);pgIss(el(“pg”));}
+function addIss(){modal(“Log Issue”,’<div class="fld"><label>Title</label><input class="inp" id="is1"/></div><div class="f2"><div class="fld"><label>Priority</label><select class="sel" id="is2"><option>critical</option><option>high</option><option>medium</option><option>low</option></select></div><div class="fld"><label>Owner</label><input class="inp" id="is3" value="Lance"/></div></div><div class="fld"><label>Notes</label><textarea class="txa" id="is4"></textarea></div><div class="fld"><label>Resolution</label><textarea class="txa" id="is5"></textarea></div>’,’<button class="btn bno" onclick="closeM()">Cancel</button><button class="btn bnn" onclick="saveIss()">Save</button>’);}
+function saveIss(){D.issues.push({id:Date.now(),title:el(“is1”).value,pri:el(“is2”).value,status:“open”,owner:el(“is3”).value,notes:el(“is4”).value,res:el(“is5”).value});saveD(D);closeM();pgIss(el(“pg”));}
+function editIss(id){var i=D.issues.filter(function(x){return x.id===id;})[0];if(!i)return;modal(“Edit Issue”,’<div class="fld"><label>Title</label><input class=“inp” id=“ei1” value=”’+i.title.replace(/”/g,”"”)+’”/></div><div class="f2"><div class="fld"><label>Priority</label><select class="sel" id="ei2"><option ‘+(i.pri===“critical”?“selected”:””)+’”>critical</option><option ‘+(i.pri===“high”?“selected”:””)+’”>high</option><option ‘+(i.pri===“medium”?“selected”:””)+’”>medium</option><option ‘+(i.pri===“low”?“selected”:””)+’”>low</option></select></div><div class="fld"><label>Owner</label><input class=“inp” id=“ei3” value=”’+(i.owner||””)+’”/></div></div><div class="fld"><label>Notes</label><textarea class="txa" id="ei4">’+(i.notes||””)+’</textarea></div><div class="fld"><label>Resolution</label><textarea class="txa" id="ei5">’+(i.res||””)+’</textarea></div>’,’<button class="btn bno" onclick="closeM()">Cancel</button><button class="btn bnn" onclick="updIss('+id+')">Save</button>’);}
+function updIss(id){D.issues=D.issues.map(function(i){return i.id!==id?i:Object.assign({},i,{title:el(“ei1”).value,pri:el(“ei2”).value,owner:el(“ei3”).value,notes:el(“ei4”).value,res:el(“ei5”).value});});saveD(D);closeM();pgIss(el(“pg”));}
+
+// BYLAWS
+function pgByl(p){
+var h=’<div class="ph"><div><div class="ptitle">Bylaws</div></div>’;
+if(isA())h+=’<button class="btn bnn bsm" onclick="editByl()">Edit</button>’;
+h+=’</div><div style="background:#fff;border:1px solid #ddd8cc;padding:2.5rem;max-width:740px"><div style="text-align:center;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:2px solid #0d1b2a"><div style="font-family:Cormorant Garamond,serif;font-size:1.8rem;font-weight:700;color:#0d1b2a">STEAM100</div><div style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#7a7a8a;margin-top:.3rem">Bylaws of the Corporation</div></div>’;
+h+=’<div style="font-size:.84rem;font-weight:300;line-height:1.9">’+(D.bylaws||”<p>Bylaws not yet entered.</p>”)+’</div></div>’;
+p.innerHTML=h;
+}
+function editByl(){modal(“Edit Bylaws”,’<div class="fld"><label>Bylaws (HTML supported)</label><textarea class="txa" id="bl1" style="min-height:280px;font-size:.74rem">’+(D.bylaws||””)+’</textarea></div>’,’<button class="btn bno" onclick="closeM()">Cancel</button><button class="btn bnn" onclick="saveByl()">Save</button>’);}
+function saveByl(){D.bylaws=el(“bl1”).value;saveD(D);closeM();pgByl(el(“pg”));}
+
+// BOARD GUIDE
+function pgGuide(p){
+var qa=[
+[“What is this platform?”,“The STEAM100 Private Governance Platform is your secure board operations hub. It contains everything needed to govern the organization: compliance tracking, meetings, grants, votes, documents, and more.”],
+[“Access Codes — Keep Confidential”,“Administrator (Lance): 7949 — full access. Board Members (Mia, Edward, Nina, Maisha): 8791 — read-only. Staff and Volunteers: 4321 — events and tasks only.”],
+[“Can I accidentally change anything?”,“No. Board member access is completely read-only. There are no edit buttons in your view.”],
+[“Where are the actual files stored?”,“Files are stored in Google Drive. This platform shows organized links. Click Open to view any document in Google Drive.”],
+[“How do I join a meeting?”,“Go to the Meetings tab and click the Join Meeting link next to your upcoming meeting.”],
+[“How do I check compliance status?”,“Go to the Compliance tab for a live score and every filing listed as Filed, Due Soon, or Overdue with direct filing links.”],
+[“What are my legal duties?”,“Three core duties: Duty of Care (act with competence), Duty of Loyalty (org above personal interests), Duty of Obedience (follow laws and bylaws). Governance is your role, not day-to-day operations.”]
+];
+var h=’<div class="ph"><div><div class="ptitle">Board Member Guide</div><div class="psub">How to use this platform</div></div></div>’;
+h+=’<div class="ibar g"><span>🔐</span><div><div class="ititle">Access Codes — Confidential</div><div class="ibody">Admin (Lance): <strong>7949</strong>  ·  Board Members: <strong>8791</strong>  ·  Staff: <strong>4321</strong></div></div></div>’;
+qa.forEach(function(q){h+=’<div class="card"><div style="font-family:Cormorant Garamond,serif;font-size:1rem;font-weight:500;color:#0d1b2a;margin-bottom:.4rem">◆ ‘+q[0]+’</div><div style="font-size:.8rem;font-weight:300;line-height:1.75">’+q[1]+’</div></div>’;});
+p.innerHTML=h;
+}
+</script>
+
+</body>
+</html>
